@@ -40,7 +40,6 @@ export default function getSkins(cfg: GameConfig, scoreboard: (number | undefine
       }
     }
   })
-  console.log(points);
   return { holeWinners, points, skins, streaks };
 }
 
