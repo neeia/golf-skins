@@ -1,6 +1,7 @@
 <script lang="ts">
   import Config from "../components/Config.svelte";
   import Game from "../components/Game.svelte";
+    import InfoDialog from "../components/InfoDialog.svelte";
   import Players from "../components/Players.svelte";
   import Review from "../components/Review.svelte";
   import AppState from "../types/appstate";
@@ -26,12 +27,14 @@
     birdieBonus: 1,
     eagleBonus: 4,
     maxStreak: 3,
+    hole: 0,
   };
 
   let scorecard: number[][] = [...Array(18)].map(() => []);
 </script>
 
-<h1>Golf Skins</h1>
+<h1>HUSKINS</h1>
+<InfoDialog />
 <main>
   {#if state === AppState.Players}
     <Players bind:players={cfg.players} />
@@ -45,9 +48,9 @@
 </main>
 <section class="next">
   <button disabled={state === 0} on:click={prevState}>Previous</button>
-  <button disabled={state === 3} on:click={nextState}
-    >Next: {stateMap[state] ?? "None"}</button
-  >
+  <button disabled={state === 3} on:click={nextState}>
+    Next: {stateMap[state] ?? "None"}
+  </button>
 </section>
 
 <style>
