@@ -35,6 +35,7 @@
     Max Skin Value
     <input
       type="number"
+      min="0"
       bind:value={cfg.maxStreak}
       on:focus={(e) => {
         e.currentTarget.select();
@@ -45,6 +46,7 @@
     Birdie Bonus
     <input
       type="number"
+      min="0"
       bind:value={cfg.birdieBonus}
       on:focus={(e) => {
         e.currentTarget.select();
@@ -55,6 +57,7 @@
     Eagle Bonus
     <input
       type="number"
+      min="0"
       bind:value={cfg.eagleBonus}
       on:focus={(e) => {
         e.currentTarget.select();
@@ -113,7 +116,7 @@
   }
   section.options {
     display: grid;
-    grid-template-columns: 200px auto;
+    grid-template-columns: auto auto;
     align-items: center;
     text-align: end;
     gap: 4px 12px;
