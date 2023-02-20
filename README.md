@@ -1,6 +1,6 @@
 # Golf Skins
 
-`This is a weekend project I built for my dad, who loves golf.
+This is a weekend project I built for my dad, who loves golf.
 
 ## Installation
 
