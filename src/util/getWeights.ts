@@ -1,7 +1,7 @@
-import type GameConfig from "../types/gamecfg";
+import type AppSession from "../types/appsession";
 
-export default function getWeights(cfg: GameConfig) {
-  const _handicaps = cfg.players
+export default function getWeights(session: AppSession) {
+  const _handicaps = session.players
     .map(p => p.handicap);
 
   // Each player's bonus strokes, in order
@@ -14,7 +14,7 @@ export default function getWeights(cfg: GameConfig) {
   const weights: number[][] = [...Array(18)];
   for (let i = 0; i < 18; i++) {
     weights[i] = handicaps.map((numStrokes) =>
-      +(numStrokes % 18 >= cfg.difficulties[i]) + (numStrokes / 18 >> 0)
+      +(numStrokes % 18 >= session.difficulties[i]) + (numStrokes / 18 >> 0)
     )
   }
   return weights;

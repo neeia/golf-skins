@@ -1,15 +1,14 @@
 <script lang="ts">
-  import type GameConfig from "../types/gamecfg";
+  import { cfg, session } from "../stores/stores";
 
-  export let cfg: GameConfig;
   $: difficulties = [...Array(19)].map((_, i) => {
-    return cfg.difficulties.filter((n) => n === i).length;
+    return $session.difficulties.filter((n) => n === i).length;
   });
 </script>
 
 <h2>Course Info</h2>
 <ol class="hole">
-  {#each cfg.difficulties as hole, i}
+  {#each $session.difficulties as hole, i}
     <li class="hole">
       <label class="hole">
         Hole {i + 1}:
@@ -36,7 +35,7 @@
     <input
       type="number"
       min="0"
-      bind:value={cfg.maxStreak}
+      bind:value={$cfg.maxStreak}
       on:focus={(e) => {
         e.currentTarget.select();
       }}
@@ -47,7 +46,7 @@
     <input
       type="number"
       min="0"
-      bind:value={cfg.birdieBonus}
+      bind:value={$cfg.birdieBonus}
       on:focus={(e) => {
         e.currentTarget.select();
       }}
@@ -58,18 +57,15 @@
     <input
       type="number"
       min="0"
-      bind:value={cfg.eagleBonus}
+      bind:value={$cfg.eagleBonus}
       on:focus={(e) => {
         e.currentTarget.select();
       }}
     />
   </label>
   <label>
-    Always Score Birdies
-    <input
-      type="checkbox"
-      bind:checked={cfg.alwaysScoreBirds}
-    />
+    Don't Tie Birdies
+    <input type="checkbox" bind:checked={$cfg.alwaysScoreBirds} />
   </label>
 </section>
 

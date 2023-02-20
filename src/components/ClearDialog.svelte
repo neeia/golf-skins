@@ -1,6 +1,15 @@
 <script lang="ts">
   import { tick } from "svelte";
+  import {
+    cfg,
+    defaultConfig,
+    defaultScorecard,
+    defaultSession,
+    scorecard,
+    session,
+  } from "../stores/stores";
 
+  export let resetAppState: () => void;
   let open = false;
   function toggleOpen() {
     open = !open;
@@ -40,31 +49,62 @@
       }
     }
   }
+
+  function resetScorecard() {
+    $scorecard = defaultScorecard;
+    resetAppState();
+  }
+  function resetConfig() {
+    $cfg = defaultConfig;
+    resetAppState();
+  }
+  function resetPlayers() {
+    $session = defaultSession;
+    $scorecard = defaultScorecard;
+    resetAppState();
+  }
+  function resetAll() {
+    $cfg = defaultConfig;
+    $session = defaultSession;
+    $scorecard = defaultScorecard;
+    resetAppState();
+  }
 </script>
 
 <svelte:window on:keydown={handleKeyDown} />
-<button class="info" on:click={toggleOpen}>
+<button class="settings" on:click={toggleOpen}>
   <svg
     width="24px"
     height="24px"
+    stroke-width="2"
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     color="#000000"
   >
     <path
-      d="M12 11.5v5M12 7.51l.01-.011M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"
+      d="M12 15a3 3 0 100-6 3 3 0 000 6z"
       stroke="#000000"
       stroke-width="2"
       stroke-linecap="round"
       stroke-linejoin="round"
     />
-  </svg>
-</button>
+    <path
+      d="M19.622 10.395l-1.097-2.65L20 6l-2-2-1.735 1.483-2.707-1.113L12.935 2h-1.954l-.632 2.401-2.645
+       1.115L6 4 4 6l1.453 1.789-1.08 2.657L2 11v2l2.401.655L5.516 16.3 4 18l2 2 1.791-1.46 2.606 1.072
+       L11 22h2l.604-2.387 2.651-1.098C16.697 18.831 18 20 18 20l2-2-1.484-1.75 1.098-2.652 2.386-.62V11
+       l-2.378-.605z"
+      stroke="#000000"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg></button
+>
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <dialog class="blocker" {open} on:click={toggleOpen} />
 <dialog class="info" {open}>
-  <h1>Info</h1>
+  <h1>Clear Data</h1>
   <button class="close" on:click={toggleOpen} bind:this={close}>
     <svg
       width="24px"
@@ -84,48 +124,21 @@
       />
     </svg>
   </button>
-  <section>
-    <h2>About</h2>
-    <p>
-      HUSKINS is an app that makes it easier to play a skins game of golf. This
-      is a weekend project I made for my father, an avid golfer.
-    </p>
-  </section>
-  <section>
-    <h2>Support Me</h2>
-    <p>
-      If this app helped you, you can help me too! Donating contributes to
-      server costs, and anything is appreciated.
-    </p>
-    <a
-      class="ko-fi"
-      href="https://ko-fi.com/neeia"
-      target="_blank"
-      rel="noreferrer noopener"
-      title="Open Ko-fi"
-    >
-      <img
-        class="icon"
-        width="131px"
-        height="37px"
-        src="/img/kofi.webp"
-        alt="Ko-fi icon"
-        loading="lazy"
-      />
-    </a>
-  </section>
-  <section>
-    <h2>Contact</h2>
-    <p>
-      Got any suggestions? Feel free to email me:
-      <a href="mailto:golf@neia.dev" bind:this={lastFocusableElement}>
-        golf@neia.dev</a
-      >
-    </p>
+  <section class="buttons">
+    <button on:click={resetPlayers}>Reset Players</button>
+    <button on:click={resetConfig}>Reset Settings</button>
+    <button on:click={resetScorecard}>Reset Scores</button>
+    <hr />
+    <button on:click={resetAll}>Reset All</button>
   </section>
 </dialog>
 
 <style>
+  h1 {
+    font-size: 24px;
+    width: 100%;
+    text-align: center;
+  }
   dialog.blocker {
     background-color: rgba(0, 0, 0, 0.5);
     width: 100vw;
@@ -155,6 +168,9 @@
     opacity: 0;
     display: block;
     visibility: hidden;
+    width: 240px;
+    height: 340px;
+    box-shadow: 0px 0px 12px -4px #000;
   }
   dialog[open] {
     visibility: visible;
@@ -162,46 +178,41 @@
     opacity: 1;
   }
 
-  @media screen and (min-width: 769px) {
-    dialog.info {
-      max-height: 800px;
-      max-width: 600px;
-      box-shadow: 0px 0px 12px -4px #000;
-    }
-  }
-
-  section {
+  section.buttons {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-bottom: 24px;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
   }
-  a.ko-fi {
-    background-color: #ff5e5b;
-    width: min-content;
-    height: min-content;
+  hr {
+    width: 85%;
+    border: none;
+    background-color: #666;
+    height: 2px;
+  }
+  section.buttons > button {
+    height: 48px;
+    width: 80%;
     border-radius: 4px;
-    position: "relative";
-    margin-top: 2px;
-    padding: 12px 20px 8px 12px;
+    background-color: whitesmoke;
   }
-  @media only screen and (max-width: 770px) {
-    dialog {
-      height: 100%;
-      width: 100%;
-    }
-  }
-  h2 {
-    margin: 0;
-  }
+
   @media only screen and (min-width: 769px) {
-    button.info > svg {
+    button.settings > svg {
       width: 32px;
       height: 32px;
     }
   }
-  button.close,
-  button.info {
+  button.settings {
+    position: absolute;
+    top: 8px;
+    left: 16px;
+    padding: 4px;
+    display: flex;
+    border-radius: 50%;
+  }
+  button.close {
     position: absolute;
     top: 8px;
     right: 16px;

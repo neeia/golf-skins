@@ -1,8 +1,14 @@
 <script lang="ts">
   import { tick } from "svelte";
+    import { session } from "../stores/stores";
   import type Player from "../types/player";
 
-  export let players: Player[];
+  let players: Player[] = [];
+  session.subscribe(value => {
+    console.log(value)
+    players = value.players;
+  })
+  
   async function addPlayer() {
     players = [...players, { name: "", handicap: 0 }];
     await tick();

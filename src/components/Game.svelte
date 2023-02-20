@@ -1,27 +1,26 @@
 <script lang="ts">
-  import type GameConfig from "../types/gamecfg";
   import getWeights from "../util/getWeights";
   import getSkins from "../util/getSkins";
+  import { cfg, scorecard, session } from "../stores/stores";
 
-  export let cfg: GameConfig;
-  export let scorecard: (number | undefined)[][];
-
-  $: if (scorecard[0].length !== cfg.players.length) {
-    scorecard.forEach((_, i) => (scorecard[i] = cfg.players.map(() => undefined)));
+  $: if ($scorecard[0].length !== $session.players.length) {
+    $scorecard.forEach(
+      (_, i) => ($scorecard[i] = $session.players.map(() => undefined))
+    );
   }
 
-  $: weights = getWeights(cfg);
-  $: ({ points, streaks } = getSkins(cfg, scorecard, weights));
-  $: cfg.highestHole = Math.max(cfg.highestHole, cfg.hole);
+  $: weights = getWeights($session);
+  $: ({ points, streaks } = getSkins($cfg, $scorecard, weights));
+  $: $session.highestHole = Math.max($session.highestHole, $session.hole);
 
   function changeScore(player: number, delta: number) {
-    scorecard[cfg.hole][player] ??= 0;
-    scorecard[cfg.hole][player]! += delta;
+    $scorecard[$session.hole][player] ??= 0;
+    $scorecard[$session.hole][player]! += delta;
   }
 </script>
 
 <section class="hole">
-  <button disabled={!cfg.hole} on:click={() => (cfg.hole -= 1)}>
+  <button disabled={!$session.hole} on:click={() => ($session.hole -= 1)}>
     <svg
       width="40px"
       height="40px"
@@ -41,9 +40,9 @@
     </svg>
   </button>
   <h2>
-    Hole {cfg.hole + 1}
+    Hole {$session.hole + 1}
   </h2>
-  <button disabled={cfg.hole === 17} on:click={() => (cfg.hole += 1)}>
+  <button disabled={$session.hole === 17} on:click={() => ($session.hole += 1)}>
     <svg
       width="40px"
       height="40px"
@@ -63,10 +62,10 @@
     </svg>
   </button>
 </section>
-<div>Handicap {cfg.difficulties[cfg.hole]}</div>
+<div>Handicap {$session.difficulties[$session.hole]}</div>
 <div>
-  {streaks[cfg.hole]}
-  {streaks[cfg.hole] === 1 ? "Skin" : "Skins"}
+  {streaks[$session.hole]}
+  {streaks[$session.hole] === 1 ? "Skin" : "Skins"}
 </div>
 <dl>
   <dt class="title">Name</dt>
@@ -74,10 +73,10 @@
     <div>Skins</div>
     <div>Score</div>
   </dd>
-  {#each cfg.players as player, i}
+  {#each $session.players as player, i}
     <dt class={!player.name ? "untitled" : ""}>{player.name || "No Name"}</dt>
     <dd>
-      <div>{cfg.hole ? points[cfg.hole - 1][i] : 0}</div>
+      <div>{$session.hole ? points[$session.hole - 1][i] : 0}</div>
       <div class="score-counter">
         <button class="increment" on:click={() => changeScore(i, -1)}>
           <svg
@@ -99,7 +98,7 @@
         </button>
         <input
           type="number"
-          bind:value={scorecard[cfg.hole][i]}
+          bind:value={$scorecard[$session.hole][i]}
           on:focus={(e) => {
             e.currentTarget.select();
           }}

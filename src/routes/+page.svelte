@@ -1,11 +1,11 @@
 <script lang="ts">
+  import ClearDialog from "../components/ClearDialog.svelte";
   import Config from "../components/Config.svelte";
   import Game from "../components/Game.svelte";
-    import InfoDialog from "../components/InfoDialog.svelte";
+  import InfoDialog from "../components/InfoDialog.svelte";
   import Players from "../components/Players.svelte";
   import Review from "../components/Review.svelte";
   import AppState from "../types/appstate";
-  import type GameConfig from "../types/gamecfg";
 
   const stateMap = ["Options", "Strokes", "Summary"];
   let state: AppState = AppState.Players;
@@ -15,39 +15,20 @@
   const nextState = () => {
     state += 1;
   };
-
-  let cfg: GameConfig = {
-    players: [
-      { name: "", handicap: 0 },
-      { name: "", handicap: 0 },
-      { name: "", handicap: 0 },
-      { name: "", handicap: 0 },
-    ],
-    difficulties: [
-      15, 7, 9, 3, 13, 11, 1, 5, 17, 2, 18, 16, 8, 12, 14, 6, 4, 10,
-    ],
-    birdieBonus: 1,
-    eagleBonus: 4,
-    maxStreak: 3,
-    hole: 0,
-    highestHole: 0,
-    alwaysScoreBirds: false,
-  };
-
-  let scorecard: (number | undefined)[][] = [...Array(18)].map(() => []);
 </script>
 
 <h1>HUSKINS</h1>
+<ClearDialog resetAppState={() => (state = 0)} />
 <InfoDialog />
 <main>
   {#if state === AppState.Players}
-    <Players bind:players={cfg.players} />
+    <Players />
   {:else if state === AppState.Config}
-    <Config bind:cfg />
+    <Config />
   {:else if state === AppState.Game}
-    <Game bind:cfg bind:scorecard />
+    <Game />
   {:else if state === AppState.Review}
-    <Review {cfg} {scorecard} />
+    <Review />
   {/if}
 </main>
 <section class="next">

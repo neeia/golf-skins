@@ -5,7 +5,7 @@ export default function getSkins(cfg: GameConfig, scoreboard: (number | undefine
     sc.map((score, j) => (score ?? 99) - weights[i][j])
   )
 
-  const holeWinners: number[] = [];
+  const holeWinners: number[][] = [];
   const points: number[][] = scoreboard.map(hole => hole.map(() => 0));
   const skins: number[] = [];
   const streaks: number[] = [];
@@ -14,17 +14,19 @@ export default function getSkins(cfg: GameConfig, scoreboard: (number | undefine
     // val is an array of size p
     streak++;
     streaks.push(streak);
-    const winner = getWinner(val);
-    if (winner != null) {
-      const score = Math.min(cfg.maxStreak, streak) + getBonusSkins((scoreboard[i][winner] ?? 99), cfg);
-      for (let j = i; j < 18; j++) {
-        points[j][winner] += score;
-      }
-      holeWinners.push(winner);
+    const winners = getWinner(val, cfg.alwaysScoreBirds);
+    if (winners.length) {
+      winners.forEach(winner => {
+        const score = Math.min(cfg.maxStreak, streak) + getBonusSkins((scoreboard[i][winner] ?? 99), cfg);
+        for (let j = i; j < 18; j++) {
+          points[j][winner] += score;
+        }
+      })
+      holeWinners.push(winners);
       skins.push(streak);
       streak -= Math.min(cfg.maxStreak, streak);
     } else {
-      holeWinners.push(-1);
+      holeWinners.push([]);
       skins.push(0);
       if (cfg.alwaysScoreBirds) {
         scoreboard[i]
@@ -41,13 +43,13 @@ export default function getSkins(cfg: GameConfig, scoreboard: (number | undefine
   return { holeWinners, points, skins, streaks };
 }
 
-function getWinner(arr: number[]): number | null {
+function getWinner(arr: number[], alwaysScoreBirds: boolean): number[] {
   const min = Math.min(...arr);
 
   // keeps track of array indices of each hole leader
   const winners = arr.map((e, i) => e === min ? i : '').filter(String) as number[];
-
-  return winners.length === 1 ? winners[0] : null;
+  if (!alwaysScoreBirds && winners.length !== 1) return [];
+  return winners;
 }
 
 function getBonusSkins(strokes: number, cfg: GameConfig) {

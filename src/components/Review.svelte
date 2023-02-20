@@ -1,23 +1,22 @@
 <script lang="ts">
-  import type GameConfig from "../types/gamecfg";
+    import { cfg, scorecard, session } from "../stores/stores";
   import getSkins from "../util/getSkins";
   import getWeights from "../util/getWeights";
 
-  export let cfg: GameConfig;
-  export let scorecard: (number | undefined)[][];
-  $: weights = getWeights(cfg);
-  $: ({ holeWinners, points } = getSkins(cfg, scorecard, weights));
-  $: sortedPoints = cfg.players
+  $: weights = getWeights($session);
+  $: $session.highestHole = Math.max($session.highestHole, $session.hole);
+  $: ({ holeWinners, points } = getSkins($cfg, $scorecard, weights));
+  $: sortedPoints = $session.players
     .map(({ name }, i) => {
       return { name, skins: points[17][i] };
     })
     .sort((a, b) => b.skins - a.skins);
-  $: sums = scorecard.reduce<number[]>(
+  $: sums = $scorecard.reduce<number[]>(
     (acc, hole) => {
       hole.forEach((strokes, i) => (acc[i] += strokes ?? 0));
       return acc;
     },
-    cfg.players.map(() => 0)
+    $session.players.map(() => 0)
   );
 
   function transcribe(n: number) {
@@ -50,7 +49,7 @@
         <th>{i + 1}</th>
       {/each}
     </tr>
-    {#each cfg.players as player, i}
+    {#each $session.players as player, i}
       <tr class="player-row">
         <th class={!player.name ? "untitled" : ""}>
           {player.name || "No Name"}
@@ -59,10 +58,10 @@
         {#each [...Array(18)] as _, j}
           <td
             class={`score ${
-              holeWinners[j] === i ? "hole-leader" : ""
-            } ${transcribe(scorecard[j][i] ?? 0)}`}
+              holeWinners[j].includes(i) ? "hole-leader" : ""
+            } ${transcribe($scorecard[j][i] ?? 0)}`}
           >
-            {cfg.highestHole < j ? "-" : scorecard[j][i] ?? "-"}
+            {$session.highestHole < j ? "-" : $scorecard[j][i] ?? "-"}
           </td>
         {/each}
       </tr>
@@ -128,7 +127,7 @@
     justify-self: end;
   }
   td.hole-leader {
-    font-weight: 700;
+    font-weight: 900;
   }
   .untitled {
     color: #666;
