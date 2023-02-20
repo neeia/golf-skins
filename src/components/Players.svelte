@@ -35,6 +35,11 @@
   </button>
 </div>
 <dl>
+  <dt>Name</dt>
+  <dd>
+    <div>HDCP</div>
+    <span />
+  </dd>
   {#each players as player, i}
     <dt>
       <input
