@@ -157,6 +157,9 @@
     display: block;
     visibility: hidden;
   }
+  dialog.blocker:not([open]) {
+    display: none;
+  }
   dialog[open] {
     visibility: visible;
     transform: translate(0, 0vh);
