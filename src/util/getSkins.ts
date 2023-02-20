@@ -40,6 +40,7 @@ export default function getSkins(cfg: GameConfig, scoreboard: (number | undefine
       }
     }
   })
+  console.log(points);
   return { holeWinners, points, skins, streaks };
 }
 
@@ -49,6 +50,7 @@ function getWinner(arr: number[], alwaysScoreBirds: boolean): number[] {
   // keeps track of array indices of each hole leader
   const winners = arr.map((e, i) => e === min ? i : '').filter(String) as number[];
   if (!alwaysScoreBirds && winners.length !== 1) return [];
+  if (alwaysScoreBirds && min >= 0) return [];
   return winners;
 }
 

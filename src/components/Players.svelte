@@ -5,7 +5,6 @@
 
   let players: Player[] = [];
   session.subscribe(value => {
-    console.log(value)
     players = value.players;
   })
   
