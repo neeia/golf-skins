@@ -12,6 +12,7 @@
 
   $: weights = getWeights(cfg);
   $: ({ points, streaks } = getSkins(cfg, scorecard, weights));
+  $: cfg.highestHole = Math.max(cfg.highestHole, cfg.hole);
 
   function changeScore(player: number, delta: number) {
     scorecard[cfg.hole][player] += delta;

@@ -20,6 +20,8 @@
     players: [
       { name: "", handicap: 0 },
       { name: "", handicap: 0 },
+      { name: "", handicap: 0 },
+      { name: "", handicap: 0 },
     ],
     difficulties: [
       15, 7, 9, 3, 13, 11, 1, 5, 17, 2, 18, 16, 8, 12, 14, 6, 4, 10,
@@ -28,6 +30,8 @@
     eagleBonus: 4,
     maxStreak: 3,
     hole: 0,
+    highestHole: 0,
+    alwaysScoreBirds: false,
   };
 
   let scorecard: number[][] = [...Array(18)].map(() => []);

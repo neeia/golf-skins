@@ -26,6 +26,16 @@ export default function getSkins(cfg: GameConfig, scoreboard: number[][], weight
     } else {
       holeWinners.push(-1);
       skins.push(0);
+      if (cfg.alwaysScoreBirds) {
+        scoreboard[i]
+          .map((score) => getBonusSkins(score, cfg))
+          .forEach((score, p) => {
+            if (!score) return;
+            for (let j = i; j < 18; j++) {
+              points[j][p] += score;
+            }
+          });
+      }
     }
   })
   return { holeWinners, points, skins, streaks };

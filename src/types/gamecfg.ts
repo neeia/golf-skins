@@ -7,4 +7,6 @@ export default interface GameConfig {
   eagleBonus: number;
   difficulties: number[];
   hole: number;
+  highestHole: number;
+  alwaysScoreBirds: boolean;
 }

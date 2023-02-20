@@ -48,8 +48,8 @@
         <td class="sum">{sums[i]}</td>
         {#each [...Array(18)] as _, j}
           <td class={holeWinners[j] === i ? "hole-leader" : ""}>
-            {scorecard[j][i]}</td
-          >
+            {cfg.highestHole < j ? "-" : scorecard[j][i]}
+          </td>
         {/each}
       </tr>
     {/each}

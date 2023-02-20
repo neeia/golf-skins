@@ -64,6 +64,13 @@
       }}
     />
   </label>
+  <label>
+    Always Score Birdies
+    <input
+      type="checkbox"
+      bind:checked={cfg.alwaysScoreBirds}
+    />
+  </label>
 </section>
 
 <style>
