@@ -34,7 +34,7 @@
     alwaysScoreBirds: false,
   };
 
-  let scorecard: number[][] = [...Array(18)].map(() => []);
+  let scorecard: (number | undefined)[][] = [...Array(18)].map(() => []);
 </script>
 
 <h1>HUSKINS</h1>

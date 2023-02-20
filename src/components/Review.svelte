@@ -4,7 +4,7 @@
   import getWeights from "../util/getWeights";
 
   export let cfg: GameConfig;
-  export let scorecard: number[][];
+  export let scorecard: (number | undefined)[][];
   $: weights = getWeights(cfg);
   $: ({ holeWinners, points } = getSkins(cfg, scorecard, weights));
   $: sortedPoints = cfg.players
@@ -12,13 +12,23 @@
       return { name, skins: points[17][i] };
     })
     .sort((a, b) => b.skins - a.skins);
-  $: sums = scorecard.reduce(
+  $: sums = scorecard.reduce<number[]>(
     (acc, hole) => {
-      hole.forEach((strokes, i) => (acc[i] += strokes));
+      hole.forEach((strokes, i) => (acc[i] += strokes ?? 0));
       return acc;
     },
     cfg.players.map(() => 0)
   );
+
+  function transcribe(n: number) {
+    if (n === 0) {
+      return "0";
+    } else if (n < 0) {
+      return `negative n${Math.min(2, -n)}`;
+    } else {
+      return `positive n${Math.min(1, n)}`;
+    }
+  }
 </script>
 
 <h2>Ranking</h2>
@@ -47,8 +57,12 @@
         </th>
         <td class="sum">{sums[i]}</td>
         {#each [...Array(18)] as _, j}
-          <td class={holeWinners[j] === i ? "hole-leader" : ""}>
-            {cfg.highestHole < j ? "-" : scorecard[j][i]}
+          <td
+            class={`score ${
+              holeWinners[j] === i ? "hole-leader" : ""
+            } ${transcribe(scorecard[j][i] ?? 0)}`}
+          >
+            {cfg.highestHole < j ? "-" : scorecard[j][i] ?? "-"}
           </td>
         {/each}
       </tr>
@@ -76,7 +90,7 @@
     position: relative;
     overflow-x: auto;
     width: 100%;
-    text-align: right;
+    text-align: center;
     padding-bottom: 6px;
     gap: 8px 6px;
   }
@@ -87,13 +101,14 @@
     position: sticky;
     padding-left: 4px;
     left: 0;
-    z-index: 1;
+    z-index: 2;
     background-color: white;
     height: 2.25em;
     line-height: 1.1;
     text-overflow: ellipsis;
     overflow: hidden;
     text-align: left;
+    box-shadow: 0px 2px white, 0px -2px white;
   }
   tr.player-row > th {
     font-weight: 500;
@@ -118,5 +133,34 @@
   .untitled {
     color: #666;
     font-style: italic;
+  }
+  td.score:before {
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+  .negative:before {
+    border-radius: 999px;
+    margin-left: -2px;
+    margin-top: -1px;
+    padding: 50%;
+  }
+  .positive:before {
+    margin-left: -6px;
+    top: 1px;
+    width: 75%;
+    padding-top: 75%;
+  }
+  .n1::before {
+    content: " ";
+    border: 1px solid black;
+  }
+  .n2::before {
+    content: " ";
+    border: 1px solid black;
+    outline: 1px solid black;
+    outline-offset: 1px;
   }
 </style>

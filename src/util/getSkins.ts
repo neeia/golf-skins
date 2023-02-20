@@ -1,8 +1,8 @@
 import type GameConfig from "../types/gamecfg";
 
-export default function getSkins(cfg: GameConfig, scoreboard: number[][], weights: number[][]) {
+export default function getSkins(cfg: GameConfig, scoreboard: (number | undefined)[][], weights: number[][]) {
   const weightedScores: number[][] = scoreboard.map((sc, i) =>
-    sc.map((score, j) => score - weights[i][j])
+    sc.map((score, j) => (score ?? 99) - weights[i][j])
   )
 
   const holeWinners: number[] = [];
@@ -16,7 +16,7 @@ export default function getSkins(cfg: GameConfig, scoreboard: number[][], weight
     streaks.push(streak);
     const winner = getWinner(val);
     if (winner != null) {
-      const score = Math.min(cfg.maxStreak, streak) + getBonusSkins(scoreboard[i][winner], cfg);
+      const score = Math.min(cfg.maxStreak, streak) + getBonusSkins((scoreboard[i][winner] ?? 99), cfg);
       for (let j = i; j < 18; j++) {
         points[j][winner] += score;
       }
@@ -28,7 +28,7 @@ export default function getSkins(cfg: GameConfig, scoreboard: number[][], weight
       skins.push(0);
       if (cfg.alwaysScoreBirds) {
         scoreboard[i]
-          .map((score) => getBonusSkins(score, cfg))
+          .map((score) => getBonusSkins((score ?? 99), cfg))
           .forEach((score, p) => {
             if (!score) return;
             for (let j = i; j < 18; j++) {

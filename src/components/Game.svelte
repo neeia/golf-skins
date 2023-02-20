@@ -4,10 +4,10 @@
   import getSkins from "../util/getSkins";
 
   export let cfg: GameConfig;
-  export let scorecard: number[][];
+  export let scorecard: (number | undefined)[][];
 
   $: if (scorecard[0].length !== cfg.players.length) {
-    scorecard.forEach((_, i) => (scorecard[i] = cfg.players.map(() => 0)));
+    scorecard.forEach((_, i) => (scorecard[i] = cfg.players.map(() => undefined)));
   }
 
   $: weights = getWeights(cfg);
@@ -15,7 +15,8 @@
   $: cfg.highestHole = Math.max(cfg.highestHole, cfg.hole);
 
   function changeScore(player: number, delta: number) {
-    scorecard[cfg.hole][player] += delta;
+    scorecard[cfg.hole][player] ??= 0;
+    scorecard[cfg.hole][player]! += delta;
   }
 </script>
 
