@@ -12,6 +12,13 @@
       return { name, skins: points[17][i] };
     })
     .sort((a, b) => b.skins - a.skins);
+  $: sums = scorecard.reduce(
+    (acc, hole) => {
+      hole.forEach((strokes, i) => (acc[i] += strokes));
+      return acc;
+    },
+    cfg.players.map(() => 0)
+  );
 </script>
 
 <h2>Ranking</h2>
@@ -28,6 +35,7 @@
   <table>
     <tr>
       <th>Hole</th>
+      <th class="sum">SUM</th>
       {#each [...Array(18)] as _, i}
         <th>{i + 1}</th>
       {/each}
@@ -37,8 +45,11 @@
         <th class={!player.name ? "untitled" : ""}>
           {player.name || "No Name"}
         </th>
+        <td class="sum">{sums[i]}</td>
         {#each [...Array(18)] as _, j}
-          <td class={holeWinners[j] === i ? "hole-leader" : ""}>{scorecard[j][i]}</td>
+          <td class={holeWinners[j] === i ? "hole-leader" : ""}>
+            {scorecard[j][i]}</td
+          >
         {/each}
       </tr>
     {/each}
@@ -60,13 +71,13 @@
   }
   table {
     display: grid;
-    grid-template-columns: 9ch repeat(18, 20px);
+    grid-template-columns: minmax(9ch, 1fr) 5ch repeat(18, 20px);
     grid-template-rows: 20px;
     position: relative;
     overflow-x: auto;
     width: 100%;
     text-align: right;
-    padding-bottom: 9px;
+    padding-bottom: 6px;
     gap: 8px 6px;
   }
   tr {
@@ -94,6 +105,12 @@
     font-family: monospace;
     position: sticky;
     left: 4px;
+  }
+  .sum {
+    font-weight: 700;
+    color: crimson;
+    padding-right: 16px;
+    justify-self: end;
   }
   td.hole-leader {
     font-weight: 700;
