@@ -92,6 +92,7 @@
     text-align: center;
     padding-bottom: 6px;
     gap: 8px 6px;
+    padding-right: 2px;
   }
   tr {
     display: contents;
