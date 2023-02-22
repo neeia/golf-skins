@@ -47,12 +47,18 @@
   }
   :global(html) {
     height: 100%;
+    background-color: #fafafa;
   }
   :global(body) {
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 100%;
+    max-width: 770px;
+    position: relative;
+    background-color: #fff;
+    margin: 0 auto;
+    box-shadow: 0px 0px 16px -12px #000;
   }
   main {
     display: flex;
@@ -61,7 +67,6 @@
     height: 100%;
     text-align: center;
     width: 100%;
-    max-width: 770px;
     overflow: auto;
     padding-bottom: 12px;
   }
