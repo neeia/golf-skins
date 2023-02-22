@@ -193,6 +193,9 @@
       height: 100%;
       width: 100%;
     }
+    dialog.blocker {
+      display: none !important;
+    }
   }
   h2 {
     margin: 0;
