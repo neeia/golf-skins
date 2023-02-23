@@ -72,66 +72,118 @@
 </script>
 
 <svelte:window on:keydown={handleKeyDown} />
-<button class="settings" on:click={toggleOpen}>
-  <svg
-    width="24px"
-    height="24px"
-    stroke-width="2"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    color="#000000"
-  >
-    <path
-      d="M12 15a3 3 0 100-6 3 3 0 000 6z"
-      stroke="#000000"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M19.622 10.395l-1.097-2.65L20 6l-2-2-1.735 1.483-2.707-1.113L12.935 2h-1.954l-.632 2.401-2.645
-       1.115L6 4 4 6l1.453 1.789-1.08 2.657L2 11v2l2.401.655L5.516 16.3 4 18l2 2 1.791-1.46 2.606 1.072
-       L11 22h2l.604-2.387 2.651-1.098C16.697 18.831 18 20 18 20l2-2-1.484-1.75 1.098-2.652 2.386-.62V11
-       l-2.378-.605z"
-      stroke="#000000"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg></button
->
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<dialog class="blocker" {open} on:click={toggleOpen} />
-<dialog class="info" {open}>
-  <h1>Clear Data</h1>
-  <button class="close" on:click={toggleOpen} bind:this={close}>
+{#if typeof HTMLDialogElement === "function"}
+  <button class="settings" on:click={toggleOpen}>
     <svg
       width="24px"
       height="24px"
-      stroke-width="3"
+      stroke-width="2"
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       color="#000000"
     >
       <path
-        d="M6.758 17.243L12.001 12m5.243-5.243L12 12m0 0L6.758 6.757M12.001 12l5.243 5.243"
+        d="M12 15a3 3 0 100-6 3 3 0 000 6z"
         stroke="#000000"
-        stroke-width="3"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M19.622 10.395l-1.097-2.65L20 6l-2-2-1.735 1.483-2.707-1.113L12.935 2h-1.954l-.632 2.401-2.645
+       1.115L6 4 4 6l1.453 1.789-1.08 2.657L2 11v2l2.401.655L5.516 16.3 4 18l2 2 1.791-1.46 2.606 1.072
+       L11 22h2l.604-2.387 2.651-1.098C16.697 18.831 18 20 18 20l2-2-1.484-1.75 1.098-2.652 2.386-.62V11
+       l-2.378-.605z"
+        stroke="#000000"
+        stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
       />
     </svg>
   </button>
-  <section class="buttons">
-    <button on:click={resetPlayers}>Reset Players</button>
-    <button on:click={resetConfig}>Reset Settings</button>
-    <button on:click={resetScorecard}>Reset Scores</button>
-    <hr />
-    <button on:click={resetAll}>Reset All</button>
-  </section>
-</dialog>
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <dialog class="blocker" {open} on:click={toggleOpen} />
+  <dialog class="info" {open}>
+    <h1>Clear Data</h1>
+    <button class="close" on:click={toggleOpen} bind:this={close}>
+      <svg
+        width="24px"
+        height="24px"
+        stroke-width="3"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        color="#000000"
+      >
+        <path
+          d="M6.758 17.243L12.001 12m5.243-5.243L12 12m0 0L6.758 6.757M12.001 12l5.243 5.243"
+          stroke="#000000"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+    <section class="buttons">
+      <button on:click={resetPlayers}>Reset Players</button>
+      <button on:click={resetConfig}>Reset Settings</button>
+      <button on:click={resetScorecard}>Reset Scores</button>
+      <hr />
+      <button on:click={resetAll}>Reset All</button>
+    </section>
+  </dialog>
+{:else}
+  <button class="settings" on:click={toggleOpen}>
+    <svg
+      width="24px"
+      height="24px"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      color="#000000"
+    >
+      <path
+        d="M21.888 13.5C21.164 18.311 17.013 22 12 22 6.477 22 2 17.523 2 12S6.477 2 12 2c4.1 0 7.625 2.468 9.168 6"
+        stroke="#000000"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M17 8h4.4a.6.6 0 00.6-.6V3"
+        stroke="#000000"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </button>
+  <div data-open={open} class="fallback">
+    <h1>Restart?</h1>
+    <button class="close" on:click={toggleOpen} bind:this={close}>
+      <svg
+        width="24px"
+        height="24px"
+        stroke-width="3"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        color="#000000"
+      >
+        <path
+          d="M6.758 17.243L12.001 12m5.243-5.243L12 12m0 0L6.758 6.757M12.001 12l5.243 5.243"
+          stroke="#000000"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+    <button class="clear-all" on:click={resetAll}>Clear Data</button>
+  </div>
+{/if}
 
 <style>
   h1 {
@@ -224,5 +276,29 @@
     padding: 4px;
     display: flex;
     border-radius: 50%;
+  }
+
+  div.fallback[data-open="true"] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 75%;
+    position: relative;
+  }
+
+  div.fallback[data-open="false"] {
+    display: none;
+  }
+
+  div.fallback > h1 {
+    margin: 12px 60px;
+  }
+
+  button.clear-all {
+    color: crimson;
+    border: 1px solid crimson;
+    border-radius: 4px;
+    width: min-content;
+    padding: 12px;
   }
 </style>

@@ -43,6 +43,7 @@
 </script>
 
 <svelte:window on:keydown={handleKeyDown} />
+{#if typeof HTMLDialogElement === "function"}
 <button class="info" on:click={toggleOpen}>
   <svg
     width="24px"
@@ -61,69 +62,70 @@
     />
   </svg>
 </button>
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<dialog class="blocker" {open} on:click={toggleOpen} />
-<dialog class="info" {open}>
-  <h1>Info</h1>
-  <button class="close" on:click={toggleOpen} bind:this={close}>
-    <svg
-      width="24px"
-      height="24px"
-      stroke-width="3"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      color="#000000"
-    >
-      <path
-        d="M6.758 17.243L12.001 12m5.243-5.243L12 12m0 0L6.758 6.757M12.001 12l5.243 5.243"
-        stroke="#000000"
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <dialog class="blocker" {open} on:click={toggleOpen} />
+  <dialog class="info" {open}>
+    <h1>Info</h1>
+    <button class="close" on:click={toggleOpen} bind:this={close}>
+      <svg
+        width="24px"
+        height="24px"
         stroke-width="3"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-    </svg>
-  </button>
-  <section>
-    <h2>About</h2>
-    <p>
-      HUSKINS is an app that makes it easier to play a skins game of golf. This
-      is a weekend project I made for my father, an avid golfer.
-    </p>
-  </section>
-  <section>
-    <h2>Support Me</h2>
-    <p>
-      If this app helped you, you can help me too! Donating contributes to
-      server costs, and anything is appreciated.
-    </p>
-    <a
-      class="ko-fi"
-      href="https://ko-fi.com/neeia"
-      target="_blank"
-      rel="noreferrer noopener"
-      title="Open Ko-fi"
-    >
-      <img
-        class="icon"
-        width="131px"
-        height="37px"
-        src="/img/kofi.webp"
-        alt="Ko-fi icon"
-        loading="lazy"
-      />
-    </a>
-  </section>
-  <section>
-    <h2>Contact</h2>
-    <p>
-      Got any suggestions? Feel free to email me:
-      <a href="mailto:golf@neia.dev" bind:this={lastFocusableElement}>
-        golf@neia.dev</a
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        color="#000000"
       >
-    </p>
-  </section>
-</dialog>
+        <path
+          d="M6.758 17.243L12.001 12m5.243-5.243L12 12m0 0L6.758 6.757M12.001 12l5.243 5.243"
+          stroke="#000000"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+    <section>
+      <h2>About</h2>
+      <p>
+        HUSKINS is an app that makes it easier to play a skins game of golf.
+        This is a weekend project I made for my father, an avid golfer.
+      </p>
+    </section>
+    <section>
+      <h2>Support Me</h2>
+      <p>
+        If this app helped you, you can help me too! Donating contributes to
+        server costs, and anything is appreciated.
+      </p>
+      <a
+        class="ko-fi"
+        href="https://ko-fi.com/neeia"
+        target="_blank"
+        rel="noreferrer noopener"
+        title="Open Ko-fi"
+      >
+        <img
+          class="icon"
+          width="131px"
+          height="37px"
+          src="/img/kofi.webp"
+          alt="Ko-fi icon"
+          loading="lazy"
+        />
+      </a>
+    </section>
+    <section>
+      <h2>Contact</h2>
+      <p>
+        Got any suggestions? Feel free to email me:
+        <a href="mailto:golf@neia.dev" bind:this={lastFocusableElement}>
+          golf@neia.dev</a
+        >
+      </p>
+    </section>
+  </dialog>
+{/if}
 
 <style>
   dialog.blocker {
