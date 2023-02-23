@@ -204,6 +204,11 @@
       height: 32px;
     }
   }
+  @media only screen and (max-width: 770px) {
+    dialog.blocker {
+      display: none !important;
+    }
+  }
   button.settings {
     position: absolute;
     top: 8px;
